@@ -32,19 +32,17 @@ public class WindServiceImpl implements WindService {
     @Cacheable(value = "windInfo", key = "#zipCode")
     public Wind getWindInfoByZipcode(String zipCode) throws IOException {
 
-            logger.info("Retrieving from third party API for "+zipCode);
+        logger.info("Retrieving from third party API for "+zipCode);
 
-            String url = weatherApiUrl +zipCode+",us&APPID="+ apiKey;
+        String url = weatherApiUrl +zipCode+",us&APPID="+ apiKey;
 
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(url,String.class);
-            logger.info(responseEntity.getBody());
-            byte[] jsonData = responseEntity.getBody().getBytes();
-            ObjectMapper obj = new ObjectMapper();
-            JsonNode windNode= obj.readTree(jsonData).path("wind");
-            logger.info(String.valueOf(windNode));
-            Wind wind = obj.readValue(String.valueOf(windNode),Wind.class);
-            return wind;
-
-
-    }
+        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url,String.class);
+        logger.info(responseEntity.getBody());
+        byte[] jsonData = responseEntity.getBody().getBytes();
+        ObjectMapper obj = new ObjectMapper();
+        JsonNode windNode= obj.readTree(jsonData).path("wind");
+        logger.info(String.valueOf(windNode));
+        Wind wind = obj.readValue(String.valueOf(windNode),Wind.class);
+        return wind;
+   }
 }
