@@ -13,18 +13,13 @@ public class EhCacheConfig implements CommandLineRunner{
 
     private static final Logger logger = LoggerFactory.getLogger(EhCacheConfig.class);
 
-    static CacheManager cacheManager;
-    String cacheName;
-
-    public EhCacheConfig(String cacheName){
-        this.cacheName = cacheName;
-    }
-
+    private static CacheManager cacheManager;
+    
     public static void setCacheManager(CacheManager cacheManager){
         EhCacheConfig.cacheManager = cacheManager;
     }
 
-    public void cache(String key, Object value) {
+    public void cache(String cacheName, String key, Object value) {
         Cache cache = cacheManager.getCache(cacheName);
         if (cache == null) {
             throw new NullPointerException("Failed to obtain cache: " + cacheName);
