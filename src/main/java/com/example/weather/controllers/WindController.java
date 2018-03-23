@@ -20,13 +20,11 @@ public class WindController {
       this.windService = windService;
     }
 
-
     @GetMapping("/wind/{zipCode}")
     public Wind getWeatherInfoByZipcode(@PathVariable String zipCode) throws IOException {
-
         if (zipCode != null && zipCode.length() == 5)
-            return windService.getWindInfoByZipcode(zipCode);
+           return windService.getWindInfoByZipcode(zipCode);
         else
-            throw new BadInputException("Zipcode entered is Invalid");
-         }
+           throw new BadInputException("Zipcode entered is Invalid");
+    }
 }
