@@ -39,21 +39,21 @@ public class WindServiceImplTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Cache cache;
+    Cache cache;
 
-    private CacheManager cacheManager;
+    CacheManager cacheManager;
 
     EhCacheConfig cacheConfig;
 
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.initMocks(this);  
+        cacheConfig = new EhCacheConfig();
         cacheManager = PowerMockito.mock(CacheManager.class);
         cache = PowerMockito.mock(Cache.class);
         objectMapper = new ObjectMapper();
-        cacheConfig = new EhCacheConfig("windInfoTest");
-        EhCacheConfig.setCacheManager(cacheManager);
+        cacheConfig.setCacheManager(cacheManager);
 
     }
 
@@ -63,21 +63,31 @@ public class WindServiceImplTest {
         Wind wind = new Wind(6.5,320,80);
         String windInfo = "{\"wind\":"+ objectMapper.writeValueAsString(wind)+"}";
         Wind result;
-        when(cacheManager.getCache("windInfoTest")).thenReturn(cache);
 
-        cache = cacheManager.getCache("windInfoTest");
-
-        if(cache !=null && cache.get("44145") !=null)
-           result = (Wind) cache.get("44145").getObjectValue();
-        else {
-            when(restTemplate.getForEntity(URL, String.class)).thenReturn(new ResponseEntity<>(windInfo, HttpStatus.OK));
-
-             result = windService.getWindInfoByZipcode("44145");
-            cacheConfig.cache("44145",result);
-        }
+        when(restTemplate.getForEntity(URL, String.class)).thenReturn(new ResponseEntity<>(windInfo, HttpStatus.OK));
+        result = windService.getWindInfoByZipcode("44145");
+     
         assertEquals(result.getDeg(),320);
         assertEquals(result.getGust(),80);
         verify(restTemplate, times(1)).getForEntity(URL,String.class);
-
     }
+    
+      @Test
+     public void getWindInfoByZipcodeWithCache() throws IOException {
+
+        Wind wind = new Wind(6.5,320,80);
+        String windInfo = "{\"wind\":"+ objectMapper.writeValueAsString(wind)+"}";
+        Wind result;
+        when(cacheManager.getCache("windInfo")).thenReturn(cache);
+        when(restTemplate.getForEntity(URL, String.class)).thenReturn(new ResponseEntity<>(windInfo, HttpStatus.OK));
+         
+        cacheConfig.cache("windInfo","44145",wind);
+        result = windService.getWindInfoByZipcode("44145");
+
+        assertEquals(result.getDeg(),320);
+        assertEquals(result.getGust(),80);
+        verify(restTemplate, times(1)).getForEntity(URL,String.class);
+        verify(cacheManager,times(1)).getCache("windInfo");
+    }
+    
 }
