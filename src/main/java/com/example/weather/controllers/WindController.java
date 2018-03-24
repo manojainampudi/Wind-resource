@@ -3,9 +3,6 @@ package com.example.weather.controllers;
 import com.example.weather.Model.Wind;
 import com.example.weather.exception.BadInputException;
 import com.example.weather.service.WindService;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

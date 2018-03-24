@@ -9,22 +9,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EhCacheConfig implements CommandLineRunner{
+public class EhCacheConfig implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(EhCacheConfig.class);
 
-    static CacheManager cacheManager;
-    String cacheName;
+    private CacheManager cacheManager;
 
-    public EhCacheConfig(String cacheName){
-        this.cacheName = cacheName;
+    public void setCacheManager(CacheManager manager){
+      this.cacheManager = manager;
     }
 
-    public static void setCacheManager(CacheManager cacheManager){
-        EhCacheConfig.cacheManager = cacheManager;
-    }
 
-    public void cache(String key, Object value) {
+    public void cache(String cacheName, String key, Object value) {
         Cache cache = cacheManager.getCache(cacheName);
         if (cache == null) {
             throw new NullPointerException("Failed to obtain cache: " + cacheName);

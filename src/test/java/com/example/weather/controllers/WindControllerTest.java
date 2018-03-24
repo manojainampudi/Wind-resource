@@ -3,7 +3,6 @@ package com.example.weather.controllers;
 
 
 import com.example.weather.Model.Wind;
-import com.example.weather.controllers.WindController;
 import com.example.weather.service.WindService;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.hamcrest.CoreMatchers.is;
 
-import java.io.IOException;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
