@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface WindService {
 
-    Wind getWindInfoByZipcode(String zipCode) throws IOException;
+  Wind getWindInfoByZipcode(String zipCode) throws IOException;
 }

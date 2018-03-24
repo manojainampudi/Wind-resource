@@ -11,30 +11,31 @@ import org.springframework.stereotype.Component;
 @Component
 public class EhCacheConfig implements CommandLineRunner {
 
-    private static final Logger logger = LoggerFactory.getLogger(EhCacheConfig.class);
+  private static final Logger logger = LoggerFactory.getLogger(EhCacheConfig.class);
 
-    private CacheManager cacheManager;
+  private CacheManager cacheManager;
 
-    public void setCacheManager(CacheManager manager){
-      this.cacheManager = manager;
+  public void setCacheManager(CacheManager manager) {
+    this.cacheManager = manager;
+  }
+
+
+  public void cache(String cacheName, String key, Object value) {
+    Cache cache = cacheManager.getCache(cacheName);
+    if (cache == null) {
+      throw new NullPointerException("Failed to obtain cache: " + cacheName);
     }
+    Element element = new Element(key, value);
+    cache.put(element);
+  }
 
-
-    public void cache(String cacheName, String key, Object value) {
-        Cache cache = cacheManager.getCache(cacheName);
-        if (cache == null) {
-            throw new NullPointerException("Failed to obtain cache: " + cacheName);
-        }
-        Element element = new Element(key,value);
-        cache.put(element);
-    }
-
-    @Override
-    public void run(String... args) throws Exception {
-        logger.info("\n\n Entered Command line runner");
-        if(args.length > 0){
-            if( args[0].equalsIgnoreCase("clear"))
-            cacheManager.getCache("windInfo").setDisabled(true);
+  @Override
+  public void run(String... args) throws Exception {
+    logger.info("\n\n Entered Command line runner");
+    if (args.length > 0) {
+      if (args[0].equalsIgnoreCase("clear")) {
+        cacheManager.getCache("windInfo").setDisabled(true);
       }
     }
+  }
 }

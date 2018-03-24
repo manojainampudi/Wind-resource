@@ -11,19 +11,20 @@ import java.io.IOException;
 @RequestMapping("/api/v1")
 public class WindController {
 
-    private WindService windService;
+  private WindService windService;
 
-    public WindController (WindService windService){
-      this.windService = windService;
+  public WindController(WindService windService) {
+    this.windService = windService;
+  }
+
+  @GetMapping("/wind/{zipCode}")
+  public Wind getWeatherInfoByZipcode(@PathVariable String zipCode) throws IOException {
+
+    if (zipCode != null && zipCode.length() == 5) {
+      return windService.getWindInfoByZipcode(zipCode);
+    } else {
+      throw new BadInputException("Zipcode entered is Invalid");
     }
 
-
-    @GetMapping("/wind/{zipCode}")
-    public Wind getWeatherInfoByZipcode(@PathVariable String zipCode) throws IOException {
-
-        if (zipCode != null && zipCode.length() == 5)
-            return windService.getWindInfoByZipcode(zipCode);
-        else
-            throw new BadInputException("Zipcode entered is Invalid");
-         }
+  }
 }
